@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!--
+      strings 30000 thru 30999 reserved for plugins and plugin settings
+      strings 31000 thru 31999 reserved for skins
+      strings 32000 thru 32999 reserved for scripts
+      strings 33000 thru 33999 reserved for common strings used in add-ons
+  -->
+  <string id="30000">Photos Library.photoslibrary</string>
+  <string id="30001">Moments</string>
+  <string id="30002">Places</string>
+  <string id="30003">People</string>
+  <string id="30004">Albums</string>
+  <string id="30005">Video</string>
+  <string id="30010">Search photos of the day</string>
+  <string id="30011">Search photos of the place</string>
+  <string id="30012">Search photos of {period}</string>
+  <string id="30014">Return to top</string>
+  <string id="30017">Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec</string>
+  <string id="30018">Mon,Tue,Wed,Thu,Fri,Sat,Sun</string>
+  <string id="30020">en</string>
+  <string id="30021">US</string>
+  <string id="30030">{day7}, {day} {month} {year} {hour}:{minute}</string>
+  <string id="30031">{day7}, {day} {month} {year}</string>
+  <string id="30032">{month} {year}</string>
+  <string id="30033">{year}</string>
+  <string id="30100">No items</string>
+  <string id="30200">Settings</string>
+  <string id="30210">Path to Photos Library</string>
+</strings>
