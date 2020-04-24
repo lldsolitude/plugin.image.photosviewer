@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.photosviewer" name="Photos Viewer" version="1.1.0" provider-name="kodiful">
+<addon id="plugin.image.photosviewer" name="Photos Viewer" version="1.1.0" provider-name="lldsolitude">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -10,6 +10,6 @@
 	  <platform>all</platform>
 	  <summary lang="en">Photos Viewer</summary>
 	  <description lang="en">Browse pictures and videos of macOS Photos App</description>
-    <disclaimer lang="en">Works on macOS</disclaimer>
+    <disclaimer lang="en">Works on macOS 10.15 and later</disclaimer>
   </extension>
 </addon>

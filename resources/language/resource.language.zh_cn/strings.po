@@ -1,0 +1,139 @@
+# XBMC Media Center language file
+# Addon Name: Photos Viewer
+# Addon id: plugin.image.photosviewer
+# Addon version: 1.1.0
+# Addon Provider: kodiful
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2020-04-24 12:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Photos Viewer"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "查看macOS照片应用中的图像及视频"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "适用于macOS 10.15及更高版本"
+msgstr ""
+
+#strings 30000 thru 30999 reserved for plugins and plugin settings
+#strings 31000 thru 31999 reserved for skins
+#strings 32000 thru 32999 reserved for scripts
+#strings 33000 thru 33999 reserved for common strings used in add-ons
+
+msgctxt "#30000"
+msgid "Photos Library.photoslibrary"
+msgstr ""
+
+msgctxt "#30001"
+msgid "时刻"
+msgstr ""
+
+msgctxt "#30002"
+msgid "地点"
+msgstr ""
+
+msgctxt "#30003"
+msgid "人物"
+msgstr ""
+
+msgctxt "#30004"
+msgid "相簿"
+msgstr ""
+
+msgctxt "#30005"
+msgid "视频"
+msgstr ""
+
+#empty strings from id 30006 to 30009
+
+msgctxt "#30010"
+msgid "搜索当天的照片"
+msgstr ""
+
+msgctxt "#30011"
+msgid "搜索该地点的照片"
+msgstr ""
+
+msgctxt "#30012"
+msgid "搜索{period}的照片"
+msgstr ""
+
+#empty string with id 30013
+
+msgctxt "#30014"
+msgid "回到上一层"
+msgstr ""
+
+#empty strings from id 30015 to 30016
+
+msgctxt "#30017"
+msgid "1,2,3,4,5,6,7,8,9,10,11,12"
+msgstr ""
+
+msgctxt "#30018"
+msgid "周一,周二,周三,周四,周五,周六,周日"
+msgstr ""
+
+#empty string with id 30019
+
+msgctxt "#30020"
+msgid "zh"
+msgstr ""
+
+msgctxt "#30021"
+msgid "CN"
+msgstr ""
+
+#empty strings from id 30022 to 30029
+
+msgctxt "#30030"
+msgid "{year}年{month}月{day}日 {day7} {hour}:{minute}"
+msgstr ""
+
+msgctxt "#30031"
+msgid "{year}年{month}月{day}日 {day7}"
+msgstr ""
+
+msgctxt "#30032"
+msgid "{year}年{month}月"
+msgstr ""
+
+msgctxt "#30033"
+msgid "{year}年"
+msgstr ""
+
+#empty strings from id 30034 to 30099
+
+msgctxt "#30100"
+msgid "无项目"
+msgstr ""
+
+#empty strings from id 30101 to 30199
+
+msgctxt "#30200"
+msgid "设置"
+msgstr ""
+
+#empty strings from id 30201 to 30209
+
+msgctxt "#30210"
+msgid "照片图库路径"
+msgstr ""
+
+msgctxt "#30211"
+msgid "当可用时，显示编辑后的版本而非原始版本"
+msgstr ""
