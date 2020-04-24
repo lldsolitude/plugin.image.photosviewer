@@ -7,6 +7,7 @@ import glob
 import urllib
 import urlparse
 import datetime
+import re
 
 import xbmc
 import xbmcgui as gui
@@ -51,9 +52,7 @@ def convert_timestamp(year=None, month=None, day=None, hour=None, minute=None, t
                     itemname = addon.getLocalizedString(30030).format(year=year, month=m[mindex], day=day, day7=d[dindex], hour=hour, minute=minute)
                 else:
                     itemname = addon.getLocalizedString(30031).format(year=year, month=m[mindex], day=day, day7=d[dindex])
-                if dindex == 6:
-                    itemname = '[COLOR red]' + itemname + '[/COLOR]'
-                elif dindex == 5:
+                if dindex == 5 or dindex == 6:
                     itemname = '[COLOR blue]' + itemname + '[/COLOR]'
             else:
                 itemname = addon.getLocalizedString(30032).format(year=year, month=m[mindex])
@@ -76,6 +75,7 @@ class App:
         if self.photo_app_path == '':
             self.photo_app_path = os.path.join(os.getenv('HOME'), 'Pictures', addon.getLocalizedString(30000))
         addon.setSetting('photo_library_path', self.photo_app_path)
+        self.display_adjusted = addon.getSetting('display_adjusted')
 
         self.photo_app_db_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('Profile')), 'Photos.sqlite')
         self.photo_app_db_shm_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('Profile')), 'Photos.sqlite-shm')
@@ -170,10 +170,10 @@ class App:
         pictures = self.db.GetPictureList(uuid, action)
         n = 0
         for (imageDate, imagePath, imageFilename, isAdjusted) in pictures:
-            if isAdjusted == 0:
-                imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
-            else:
+            if isAdjusted == 1 and self.display_adjusted == 'true':
                 imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub('^([-A-Z0-9]*)\.', '\g<1>_1_201_a.', imageFilename))
+            else:
+                imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
@@ -187,10 +187,10 @@ class App:
         n = 0
         videos = self.db.GetVideoList()
         for (imageDate, imagePath, imageFilename) in videos:
-            if isAdjusted == 0:
-                imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
-            else:
+            if isAdjusted == 1 and self.display_adjusted == 'true':
                 imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub('^([-A-Z0-9]*)\.', '\g<1>_2_0_a.', imageFilename))
+            else:
+                imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
