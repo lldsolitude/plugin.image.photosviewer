@@ -29,10 +29,6 @@ base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
 
-ICONS_PATH = os.path.join(resource_path, "icons")
-ICON_FOLDER = ICONS_PATH+"/folder.png"
-ICON_ALBUMS = ICONS_PATH+"/albums.png"
-
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
 
@@ -155,13 +151,13 @@ class App:
         folders = self.db.GetFolderList(folderUuid)
         for (name, uuid) in folders:
             url = build_url({'action': 'albums', 'folderUuid': uuid})
-            item = gui.ListItem(name, iconImage=ICON_FOLDER, thumbnailImage=ICON_FOLDER)
+            item = gui.ListItem(name, iconImage=DefaultFolder.png, thumbnailImage=DefaultFolder.png)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         albums = self.db.GetAlbumList(folderUuid)
         for (name, uuid) in albums:
             url = build_url({'action': 'albums', 'uuid': uuid})
-            item = gui.ListItem(name, iconImage=ICON_ALBUMS, thumbnailImage=ICON_ALBUMS)
+            item = gui.ListItem(name, iconImage=DefaultPicture.png, thumbnailImage=DefaultPicture.png)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         return n

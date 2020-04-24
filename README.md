@@ -14,6 +14,7 @@ The plugin needs to know where your Photo Library file is.  The default ("~/Pict
 ## Todo
 * Add slideshows/people/places
 * Improve sort/view
+* Make thumbnails show correct orientation
 
 ## License
 GPL v2
