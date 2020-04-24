@@ -37,7 +37,8 @@ def build_url(query):
 
 def convert_timestamp(year=None, month=None, day=None, hour=None, minute=None, timestamp=None):
     if timestamp:
-        t = datetime.datetime.fromtimestamp(int(timestamp)+978307200)
+        # Use utcfromtimestamp because timestamp already has timezone offset.
+        t = datetime.datetime.utcfromtimestamp(int(timestamp)+978307200)
         (year,month,day,hour,minute) = t.replace(year=t.year).strftime('%Y,%m,%d,%H,%M').split(',')
     if year:
         if month:
@@ -66,7 +67,7 @@ class App:
 
     def __init__(self):
 
-    	self.params = {}
+        self.params = {}
         qs = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query, keep_blank_values=True)
         for key in qs.keys():
             self.params[key] = qs[key][0]
@@ -106,69 +107,69 @@ class App:
         self.photo_app_picture_path = os.path.join(self.photo_app_path, 'originals')
         self.photo_app_rendered_path = os.path.join(self.photo_app_path, 'resources', 'renders')
         # DB
-    	self.db = None
+        self.db = None
 
     def open_db(self):
-    	if self.db is not None: return
-    	try:
+        if self.db is not None: return
+        try:
             self.db = DB(self.photo_app_db_file)
-    	except:
+        except:
             pass
 
     def close_db(self):
-    	try:
-    	    self.db.CloseDB()
-    	except:
-    	    pass
+        try:
+            self.db.CloseDB()
+        except:
+            pass
 
     def list_moments(self, year, month):
-    	n = 0
-    	moments = self.db.GetMomentList(year, month)
-    	for (name,) in moments:
-    	    if year is None:
+        n = 0
+        moments = self.db.GetMomentList(year, month)
+        for (name,) in moments:
+            if year is None:
                 url = build_url({'action': 'moments', 'year': name})
                 item = gui.ListItem(convert_timestamp(year=name), iconImage='DefaultYear.png', thumbnailImage='DefaultYear.png')
                 contextmenu = []
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=name)), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_year', 'year': name})))
                 item.addContextMenuItems(contextmenu, replaceItems=True)
-    	    elif month is None:
+            elif month is None:
                 url = build_url({'action': 'moments', 'year': year[0], 'month': name})
                 item = gui.ListItem(convert_timestamp(year=year[0],month=name), iconImage='DefaultYear.png', thumbnailImage='DefaultYear.png')
                 contextmenu = []
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0],month=name)), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_month', 'year': year[0], 'month': name})))
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0])), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_year', 'year': year[0]})))
                 item.addContextMenuItems(contextmenu, replaceItems=True)
-    	    else:
+            else:
                 url = build_url({'action': 'search_by_day', 'year': year[0], 'month': month[0], 'day': name})
                 item = gui.ListItem(convert_timestamp(year=year[0],month=month[0],day=name), iconImage='DefaultYear.png', thumbnailImage='DefaultYear.png')
                 contextmenu = []
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0],month=month[0])), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_month', 'year': year[0], 'month': month[0]})))
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0])), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_year', 'year': year[0]})))
                 item.addContextMenuItems(contextmenu, replaceItems=True)
-    	    plugin.addDirectoryItem(addon_handle, url, item, True)
-    	    n += 1
-    	return n
+            plugin.addDirectoryItem(addon_handle, url, item, True)
+            n += 1
+        return n
 
     def list_albums(self, folderUuid):
-    	n = 0
-    	folders = self.db.GetFolderList(folderUuid)
-    	for (name, uuid) in folders:
+        n = 0
+        folders = self.db.GetFolderList(folderUuid)
+        for (name, uuid) in folders:
             url = build_url({'action': 'albums', 'folderUuid': uuid})
             item = gui.ListItem(name, iconImage=ICON_FOLDER, thumbnailImage=ICON_FOLDER)
-    	    plugin.addDirectoryItem(addon_handle, url, item, True)
-    	    n += 1
-    	albums = self.db.GetAlbumList(folderUuid)
-    	for (name, uuid) in albums:
+            plugin.addDirectoryItem(addon_handle, url, item, True)
+            n += 1
+        albums = self.db.GetAlbumList(folderUuid)
+        for (name, uuid) in albums:
             url = build_url({'action': 'albums', 'uuid': uuid})
             item = gui.ListItem(name, iconImage=ICON_ALBUMS, thumbnailImage=ICON_ALBUMS)
-    	    plugin.addDirectoryItem(addon_handle, url, item, True)
-    	    n += 1
-    	return n
+            plugin.addDirectoryItem(addon_handle, url, item, True)
+            n += 1
+        return n
 
     def list_photos(self, uuid, action):
-    	pictures = self.db.GetPictureList(uuid, action)
-    	n = 0
-    	for (imageDate, imagePath, imageFilename, isAdjusted) in pictures:
+        pictures = self.db.GetPictureList(uuid, action)
+        n = 0
+        for (imageDate, imagePath, imageFilename, isAdjusted) in pictures:
             if isAdjusted == 0:
                 imagePath = os.path.join(self.photo_app_picture_path, imagePath, smart_utf8(imageFilename))
             else:
@@ -178,38 +179,38 @@ class App:
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
             contextmenu.append((addon.getLocalizedString(30014), 'XBMC.Container.Update(%s)' % build_url({})))
             item.addContextMenuItems(contextmenu, replaceItems=True)
-    	    plugin.addDirectoryItem(addon_handle, imagePath, item, False)
-    	    n += 1
-    	return n
+            plugin.addDirectoryItem(addon_handle, imagePath, item, False)
+            n += 1
+        return n
 
     def list_videos(self):
-    	n = 0
-    	videos = self.db.GetVideoList()
-    	for (imageDate, imagePath, imageFilename) in videos:
+        n = 0
+        videos = self.db.GetVideoList()
+        for (imageDate, imagePath, imageFilename) in videos:
             imagePath = os.path.join(self.photo_app_picture_path, imagePath, smart_utf8(imageFilename))
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
             contextmenu.append((addon.getLocalizedString(30014), 'XBMC.Container.Update(%s)' % build_url({})))
             item.addContextMenuItems(contextmenu, replaceItems=True)
-    	    plugin.addDirectoryItem(addon_handle, imagePath, item, False)
-    	    n += 1
-    	return n
+            plugin.addDirectoryItem(addon_handle, imagePath, item, False)
+            n += 1
+        return n
 
     def main_menu(self):
         url = build_url({'action': 'moments'})
         item = gui.ListItem(addon.getLocalizedString(30001), iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
-    	plugin.addDirectoryItem(addon_handle, url, item, True)
+        plugin.addDirectoryItem(addon_handle, url, item, True)
 
         url = build_url({'action': 'videos'})
         item = gui.ListItem(addon.getLocalizedString(30005), iconImage='DefaultVideo.png', thumbnailImage='DefaultVideo.png')
-    	plugin.addDirectoryItem(addon_handle, url, item, True)
+        plugin.addDirectoryItem(addon_handle, url, item, True)
 
         url = build_url({'action': 'albums', 'folderUuid': '----Root-Folder----'})
         item = gui.ListItem(addon.getLocalizedString(30004), iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-    	plugin.addDirectoryItem(addon_handle, url, item, True)
+        plugin.addDirectoryItem(addon_handle, url, item, True)
 
-    	return 4
+        return 4
 
 if __name__ == '__main__':
 
