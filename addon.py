@@ -151,13 +151,13 @@ class App:
         folders = self.db.GetFolderList(folderUuid)
         for (name, uuid) in folders:
             url = build_url({'action': 'albums', 'folderUuid': uuid})
-            item = gui.ListItem(name, iconImage=DefaultFolder.png, thumbnailImage=DefaultFolder.png)
+            item = gui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         albums = self.db.GetAlbumList(folderUuid)
         for (name, uuid) in albums:
             url = build_url({'action': 'albums', 'uuid': uuid})
-            item = gui.ListItem(name, iconImage=DefaultPicture.png, thumbnailImage=DefaultPicture.png)
+            item = gui.ListItem(name, iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         return n
