@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: en_gb\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
@@ -95,17 +95,17 @@ msgid "en"
 msgstr ""
 
 msgctxt "#30021"
-msgid "US"
+msgid "GB"
 msgstr ""
 
 #empty strings from id 30022 to 30029
 
 msgctxt "#30030"
-msgid "{day7}, {month} {day}, {year} {hour}:{minute}"
+msgid "{day7}, {day} {month} {year} {hour}:{minute}"
 msgstr ""
 
 msgctxt "#30031"
-msgid "{day7}, {month} {day}, {year}"
+msgid "{day7}, {day} {month} {year}"
 msgstr ""
 
 msgctxt "#30032"
