@@ -11,5 +11,15 @@
 	  <summary lang="en">Photos Viewer</summary>
 	  <description lang="en">Browse pictures and videos of macOS Photos App</description>
     <disclaimer lang="en">Works on macOS 10.15 and later</disclaimer>
+    <license>GPL-2.0</license>
+    <source>https://github.com/lldsolitude/plugin.image.photosviewer</source>
+    <news>v1.1.0 (2020-04-23)
+    - Updated for Photos.app version 5.0 database.
+    - Removed Places/People due to difficulty in implementation.
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.png</fanart>
+    </assets>
   </extension>
 </addon>
