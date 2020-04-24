@@ -167,7 +167,7 @@ class App:
         n = 0
         for (imageDate, imagePath, imageFilename, isAdjusted) in pictures:
             if isAdjusted == 1 and self.display_adjusted == 'true':
-                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub('^([-A-Z0-9]*)\.', '\g<1>_1_201_a.', imageFilename))
+                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub(r'^([-A-Z0-9]*)\.', r'\g<1>_1_201_a.', imageFilename))
             else:
                 imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
@@ -184,7 +184,7 @@ class App:
         videos = self.db.GetVideoList()
         for (imageDate, imagePath, imageFilename) in videos:
             if isAdjusted == 1 and self.display_adjusted == 'true':
-                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub('^([-A-Z0-9]*)\.', '\g<1>_2_0_a.', imageFilename))
+                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub(r'^([-A-Z0-9]*)\.', r'\g<1>_2_0_a.', imageFilename))
             else:
                 imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
