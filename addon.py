@@ -171,9 +171,9 @@ class App:
         n = 0
         for (imageDate, imagePath, imageFilename, isAdjusted) in pictures:
             if isAdjusted == 0:
-                imagePath = os.path.join(self.photo_app_picture_path, imagePath, smart_utf8(imageFilename))
+                imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
             else:
-                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, smart_utf8(imageFilename))
+                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub('^([-A-Z0-9]*)\.', '\g<1>_1_201_a.', imageFilename))
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
@@ -187,7 +187,10 @@ class App:
         n = 0
         videos = self.db.GetVideoList()
         for (imageDate, imagePath, imageFilename) in videos:
-            imagePath = os.path.join(self.photo_app_picture_path, imagePath, smart_utf8(imageFilename))
+            if isAdjusted == 0:
+                imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
+            else:
+                imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub('^([-A-Z0-9]*)\.', '\g<1>_2_0_a.', imageFilename))
             item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))

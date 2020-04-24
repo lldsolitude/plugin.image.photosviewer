@@ -114,11 +114,13 @@ class DB:
         video_list = []
         cur = self.dbconn.cursor()
         try:
-            cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME
+            cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                            FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                            WHERE m.ZCLOUDDELETESTATE = 0
                              AND m.ZCLOUDLOCALSTATE = 1
                              AND m.ZCOMPLETE = 1
+                             AND m.ZHIDDEN = 0
+                             AND m.ZTRASHEDSTATE = 0
                              AND m.ZKIND = 1
                              AND b.ZASSET = m.Z_PK
                            ORDER BY m.ZDATECREATED ASC""")
@@ -140,6 +142,8 @@ class DB:
                                WHERE m.ZCLOUDDELETESTATE = 0
                                  AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
+                                 AND m.ZHIDDEN = 0
+                                 AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND m.ZUUID = ?
                                GROUP BY m.ZUUID
@@ -151,6 +155,8 @@ class DB:
                                WHERE m.ZCLOUDDELETESTATE = 0
                                  AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
+                                 AND m.ZHIDDEN = 0
+                                 AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime('%Y', m.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') = ?
                                GROUP BY m.ZUUID
@@ -162,6 +168,8 @@ class DB:
                                WHERE m.ZCLOUDDELETESTATE = 0
                                  AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
+                                 AND m.ZHIDDEN = 0
+                                 AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime('%Y-%m', m.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') = ?
                                GROUP BY m.ZUUID
@@ -173,6 +181,8 @@ class DB:
                                WHERE m.ZCLOUDDELETESTATE = 0
                                  AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
+                                 AND m.ZHIDDEN = 0
+                                 AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime('%Y-%m-%d', m.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') = ?
                                GROUP BY m.ZUUID
@@ -188,6 +198,8 @@ class DB:
                                WHERE m.ZCLOUDDELETESTATE = 0
                                  AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
+                                 AND m.ZHIDDEN = 0
+                                 AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime('%Y-%m-%d', m.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') = ?
                                GROUP BY m.ZUUID
@@ -195,10 +207,15 @@ class DB:
             else:
                 cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, Z_26ASSETS l, ZGENERICALBUM a, ZADDITIONALASSETATTRIBUTES b
-                               WHERE a.Z_PK = l.Z_26ALBUMS
-                                 AND l.Z_34ASSETS = m.Z_PK
+                               WHERE l.Z_26ALBUMS = a.Z_PK
+                                 AND m.Z_PK = l.Z_34ASSETS
+                                 AND m.ZCLOUDDELETESTATE = 0
+                                 AND m.ZCLOUDLOCALSTATE = 1
+                                 AND m.ZCOMPLETE = 1
+                                 AND m.ZHIDDEN = 0
+                                 AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
-                                 AND a.ZUUID = ?
+                                 AND a.ZCLOUDGUID = ?
                                GROUP BY m.ZUUID
                                ORDER BY m.ZDATECREATED ASC""", (uuid,))
             for row in cur:
