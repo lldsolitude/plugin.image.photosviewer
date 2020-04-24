@@ -12,9 +12,9 @@ Your photo library must be reachable over the filesystem from the machine on whi
 The plugin needs to know where your Photo Library file is.  The default ("~/Pictures/Photos Library.photoslibrary") is probably not working in all cases. So, please enter the correct path in the plugin's settings dialog.
 
 ## Todo
-* Use correct timestamp
-* Improve sort/view
+* Add ZHIDDEN and ZTRASHEDSTATE
 * Add slideshows/people/places
+* Improve sort/view
 
 ## License
 GPL v2
