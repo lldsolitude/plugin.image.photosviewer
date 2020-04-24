@@ -182,7 +182,7 @@ class App:
     def list_videos(self):
         n = 0
         videos = self.db.GetVideoList()
-        for (imageDate, imagePath, imageFilename) in videos:
+        for (imageDate, imagePath, imageFilename, isAdjusted) in videos:
             if isAdjusted == 1 and self.display_adjusted == 'true':
                 imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub(r'^([-A-Z0-9]*)\.', r'\g<1>_2_0_a.', imageFilename))
             else:
@@ -215,10 +215,6 @@ if __name__ == '__main__':
 
     action_result = None
     items = 0
-
-    log_notice('argv[0] = %s' % sys.argv[0])
-    log_notice('argv[1] = %s' % sys.argv[1])
-    log_notice('argv[2] = %s' % sys.argv[2])
 
     action = args.get('action', None)
     folderUuid = args.get('folderUuid', None)
