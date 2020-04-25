@@ -102,7 +102,7 @@ class App:
 
         self.photo_app_picture_path = os.path.join(self.photo_app_path, 'originals')
         self.photo_app_rendered_path = os.path.join(self.photo_app_path, 'resources', 'renders')
-        # DB
+
         self.db = None
 
     def open_db(self):
@@ -162,6 +162,16 @@ class App:
             n += 1
         return n
 
+    def list_slideshows(self):
+        n = 0
+        slideshows = self.db.GetSlideshowList()
+        for (name, uuid) in slideshows:
+            url = build_url({'action': 'slideshows', 'uuid': uuid})
+            item = gui.ListItem(name, iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
+            plugin.addDirectoryItem(addon_handle, url, item, True)
+            n += 1
+        return n
+
     def list_photos(self, uuid, action):
         pictures = self.db.GetPictureList(uuid, action)
         n = 0
@@ -201,12 +211,16 @@ class App:
         item = gui.ListItem(addon.getLocalizedString(30001), iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
+        url = build_url({'action': 'albums', 'folderUuid': 'root'})
+        item = gui.ListItem(addon.getLocalizedString(30004), iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+        plugin.addDirectoryItem(addon_handle, url, item, True)
+
         url = build_url({'action': 'videos'})
         item = gui.ListItem(addon.getLocalizedString(30005), iconImage='DefaultVideo.png', thumbnailImage='DefaultVideo.png')
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
-        url = build_url({'action': 'albums', 'folderUuid': '----Root-Folder----'})
-        item = gui.ListItem(addon.getLocalizedString(30004), iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+        url = build_url({'action': 'slideshows'})
+        item = gui.ListItem(addon.getLocalizedString(30006), iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
         return 4
@@ -234,10 +248,12 @@ if __name__ == '__main__':
         items = app.list_photos(uuid[0], action[0])
     elif action[0] == 'moments':
         items = app.list_moments(year, month)
-    elif action[0] == 'videos':
-        items = app.list_videos()
     elif action[0] == 'albums':
         items = app.list_albums(folderUuid[0])
+    elif action[0] == 'videos':
+        items = app.list_videos()
+    elif action[0] == 'slideshows':
+        items = app.list_slideshows()
 
     elif action[0] == 'search_by_year':
         items = app.list_photos((year[0]), action[0])
@@ -258,6 +274,6 @@ if __name__ == '__main__':
         action_result = addon.getLocalizedString(30100)
     else:
         plugin.endOfDirectory(addon_handle, True)
-
-    xbmc.sleep(300)
+        xbmc.sleep(300)
+    
     if action_result: notify(action_result)

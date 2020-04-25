@@ -58,6 +58,10 @@ msgctxt "#30005"
 msgid "Videos"
 msgstr "视频"
 
+msgctxt "#30006"
+msgid "Slideshows"
+msgstr "幻灯片放映"
+
 #empty strings from id 30006 to 30009
 
 msgctxt "#30010"

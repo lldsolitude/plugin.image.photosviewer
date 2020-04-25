@@ -41,6 +41,10 @@ class DB:
                 cur.execute("""SELECT strftime('%Y', a.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') as y
                                FROM ZGENERICASSET a, ZADDITIONALASSETATTRIBUTES b
                                WHERE b.ZASSET = a.Z_PK
+                                 AND a.ZCLOUDDELETESTATE = 0
+                                 AND a.ZCOMPLETE = 1
+                                 AND a.ZHIDDEN = 0
+                                 AND a.ZTRASHEDSTATE = 0
                                GROUP BY y
                                ORDER BY y DESC
                                """)
@@ -48,6 +52,10 @@ class DB:
                 cur.execute("""SELECT strftime('%m', a.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') as m
                                FROM ZGENERICASSET a, ZADDITIONALASSETATTRIBUTES b
                                WHERE b.ZASSET = a.Z_PK
+                                 AND a.ZCLOUDDELETESTATE = 0
+                                 AND a.ZCOMPLETE = 1
+                                 AND a.ZHIDDEN = 0
+                                 AND a.ZTRASHEDSTATE = 0
                                  AND strftime('%Y', a.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') = ?
                                GROUP BY m
                                ORDER BY m ASC
@@ -56,6 +64,10 @@ class DB:
                 cur.execute("""SELECT strftime('%d', a.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') as d
                                FROM ZGENERICASSET a, ZADDITIONALASSETATTRIBUTES b
                                WHERE b.ZASSET = a.Z_PK
+                                 AND a.ZCLOUDDELETESTATE = 0
+                                 AND a.ZCOMPLETE = 1
+                                 AND a.ZHIDDEN = 0
+                                 AND a.ZTRASHEDSTATE = 0
                                  AND strftime('%Y-%m', a.ZDATECREATED+b.ZTIMEZONEOFFSET+978307200, 'unixepoch') = ?
                                GROUP BY d
                                ORDER BY d ASC
@@ -72,15 +84,24 @@ class DB:
         folder_list = []
         cur = self.dbconn.cursor()
         try:
-            cur.execute("""SELECT f.ZTITLE, f.ZCLOUDGUID
-                           FROM ZGENERICALBUM f, ZGENERICALBUM p
-                           WHERE f.ZCLOUDDELETESTATE = 0
-                             AND f.ZCLOUDLOCALSTATE = 1
-                             AND f.ZTRASHEDSTATE = 0
-                             AND f.ZKIND = 4000
-                             AND f.ZPARENTFOLDER = p.Z_PK
-                             AND p.ZCLOUDGUID = ?
-                           ORDER BY f.ZTITLE ASC""", (folderUuid,))
+            if folderUuid == 'root':
+                cur.execute("""SELECT f.ZTITLE, f.ZUUID
+                               FROM ZGENERICALBUM f, ZGENERICALBUM p
+                               WHERE f.ZCLOUDDELETESTATE = 0
+                                 AND f.ZTRASHEDSTATE = 0
+                                 AND f.ZKIND = 4000
+                                 AND f.ZPARENTFOLDER = p.Z_PK
+                                 AND p.ZKIND = 3999
+                               ORDER BY f.ZTITLE ASC""")
+            else:
+                cur.execute("""SELECT f.ZTITLE, f.ZUUID
+                               FROM ZGENERICALBUM f, ZGENERICALBUM p
+                               WHERE f.ZCLOUDDELETESTATE = 0
+                                 AND f.ZTRASHEDSTATE = 0
+                                 AND f.ZKIND = 4000
+                                 AND f.ZPARENTFOLDER = p.Z_PK
+                                 AND p.ZUUID = ?
+                               ORDER BY f.ZTITLE ASC""", (folderUuid,))
             for row in cur:
                 folder_list.append(row)
         except Exception, e:
@@ -93,15 +114,24 @@ class DB:
         album_list = []
         cur = self.dbconn.cursor()
         try:
-            cur.execute("""SELECT a.ZTITLE, a.ZCLOUDGUID
-                           FROM ZGENERICALBUM a, ZGENERICALBUM f
-                           WHERE a.ZCLOUDDELETESTATE = 0
-                             AND a.ZCLOUDLOCALSTATE = 1
-                             AND a.ZTRASHEDSTATE = 0
-                             AND a.ZKIND = 2
-                             AND a.ZPARENTFOLDER = f.Z_PK
-                             AND f.ZCLOUDGUID = ?
-                           ORDER BY a.ZTITLE DESC""", (folderUuid,))
+            if folderUuid == 'root':
+                cur.execute("""SELECT a.ZTITLE, a.ZUUID
+                               FROM ZGENERICALBUM a, ZGENERICALBUM f
+                               WHERE a.ZCLOUDDELETESTATE = 0
+                                 AND a.ZTRASHEDSTATE = 0
+                                 AND a.ZKIND = 2
+                                 AND a.ZPARENTFOLDER = f.Z_PK
+                                 AND f.ZKIND = 3999
+                               ORDER BY a.ZTITLE ASC""")
+            else:
+                cur.execute("""SELECT a.ZTITLE, a.ZUUID
+                               FROM ZGENERICALBUM a, ZGENERICALBUM f
+                               WHERE a.ZCLOUDDELETESTATE = 0
+                                 AND a.ZTRASHEDSTATE = 0
+                                 AND a.ZKIND = 2
+                                 AND a.ZPARENTFOLDER = f.Z_PK
+                                 AND f.ZUUID = ?
+                               ORDER BY a.ZTITLE ASC""", (folderUuid,))
             for row in cur:
                 album_list.append(row)
         except Exception, e:
@@ -110,6 +140,26 @@ class DB:
         cur.close()
         return album_list
 
+    def GetSlideshowList(self):
+        slideshow_list = []
+        cur = self.dbconn.cursor()
+        try:
+            cur.execute("""SELECT a.ZTITLE, a.ZUUID
+                           FROM ZGENERICALBUM a, ZGENERICALBUM f
+                           WHERE a.ZCLOUDDELETESTATE = 0
+                             AND a.ZTRASHEDSTATE = 0
+                             AND a.ZKIND = 1508
+                             AND a.ZPARENTFOLDER = f.Z_PK
+                             AND f.ZKIND = 3998
+                           ORDER BY a.ZTITLE ASC""")
+            for row in cur:
+                slideshow_list.append(row)
+        except Exception, e:
+            print "photoapp.db: GetSlideshowList: " + smart_utf8(e)
+            pass
+        cur.close()
+        return slideshow_list
+
     def GetVideoList(self):
         video_list = []
         cur = self.dbconn.cursor()
@@ -117,7 +167,6 @@ class DB:
             cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                            FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                            WHERE m.ZCLOUDDELETESTATE = 0
-                             AND m.ZCLOUDLOCALSTATE = 1
                              AND m.ZCOMPLETE = 1
                              AND m.ZHIDDEN = 0
                              AND m.ZTRASHEDSTATE = 0
@@ -140,7 +189,6 @@ class DB:
                 cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
-                                 AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
                                  AND m.ZHIDDEN = 0
                                  AND m.ZTRASHEDSTATE = 0
@@ -153,7 +201,6 @@ class DB:
                 cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
-                                 AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
                                  AND m.ZHIDDEN = 0
                                  AND m.ZTRASHEDSTATE = 0
@@ -166,7 +213,6 @@ class DB:
                 cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
-                                 AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
                                  AND m.ZHIDDEN = 0
                                  AND m.ZTRASHEDSTATE = 0
@@ -179,7 +225,6 @@ class DB:
                 cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
-                                 AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
                                  AND m.ZHIDDEN = 0
                                  AND m.ZTRASHEDSTATE = 0
@@ -196,7 +241,6 @@ class DB:
                 cur.execute("""SELECT (m.ZDATECREATED+b.ZTIMEZONEOFFSET) as t, m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
-                                 AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
                                  AND m.ZHIDDEN = 0
                                  AND m.ZTRASHEDSTATE = 0
@@ -210,12 +254,11 @@ class DB:
                                WHERE l.Z_26ALBUMS = a.Z_PK
                                  AND m.Z_PK = l.Z_34ASSETS
                                  AND m.ZCLOUDDELETESTATE = 0
-                                 AND m.ZCLOUDLOCALSTATE = 1
                                  AND m.ZCOMPLETE = 1
                                  AND m.ZHIDDEN = 0
                                  AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
-                                 AND a.ZCLOUDGUID = ?
+                                 AND a.ZUUID = ?
                                GROUP BY m.ZUUID
                                ORDER BY m.ZDATECREATED ASC""", (uuid,))
             for row in cur:

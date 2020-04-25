@@ -58,7 +58,11 @@ msgctxt "#30005"
 msgid "Videos"
 msgstr ""
 
-#empty strings from id 30006 to 30009
+msgctxt "#30006"
+msgid "Slideshows"
+msgstr ""
+
+#empty strings from id 30007 to 30009
 
 msgctxt "#30010"
 msgid "Search photos of the day"
