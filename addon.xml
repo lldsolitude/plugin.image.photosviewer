@@ -11,7 +11,7 @@
 	  <platform>all</platform>
 	  <summary lang="en_GB">Photos Viewer</summary>
 	  <description lang="en_GB">Browse pictures and videos of macOS Photos App</description>
-    <disclaimer lang="en_GB">Works on macOS 10.15 and later</disclaimer>
+    <disclaimer lang="en_GB">Works on Kodi 13 and later for Photos 5.0 and later</disclaimer>
     <license>GPL-2.0</license>
     <source>https://github.com/lldsolitude/plugin.image.photosviewer</source>
     <news>v1.2.0 (2020-04-26)
