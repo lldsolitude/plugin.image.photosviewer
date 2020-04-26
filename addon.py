@@ -75,29 +75,22 @@ class App:
 
         self.photo_app_db_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite')
         self.photo_app_db_wal_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite-wal')
-        self.photo_app_db_shm_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite-shm')
         self.photo_app_db_orig = os.path.join(self.photo_app_path, 'database', 'Photos.sqlite')
         self.photo_app_db_wal_orig = os.path.join(self.photo_app_path, 'database', 'Photos.sqlite-wal')
-        self.photo_app_db_shm_orig = os.path.join(self.photo_app_path, 'database', 'Photos.sqlite-shm')
+        ctime = os.stat(self.photo_app_db_orig).st_ctime
+        mtime = os.stat(self.photo_app_db_orig).st_mtime
         if xbmcvfs.exists(self.photo_app_db_wal_orig):
-            ctime = os.stat(self.photo_app_db_wal_orig).st_ctime
-            mtime = os.stat(self.photo_app_db_wal_orig).st_mtime
-            if xbmcvfs.exists(self.photo_app_db_wal_file) and os.stat(self.photo_app_db_wal_file).st_mtime == mtime:
+            ctime_wal = os.stat(self.photo_app_db_wal_orig).st_ctime
+            mtime_wal = os.stat(self.photo_app_db_wal_orig).st_mtime
+            if xbmcvfs.exists(self.photo_app_db_file) and os.stat(self.photo_app_db_file).st_mtime >= mtime_wal:
                 pass
             else:
                 xbmcvfs.copy(self.photo_app_db_orig, self.photo_app_db_file)
                 os.utime(self.photo_app_db_file, (ctime, mtime))
                 xbmcvfs.copy(self.photo_app_db_wal_orig, self.photo_app_db_wal_file)
-                os.utime(self.photo_app_db_wal_file, (ctime, mtime))
-                try:
-                    xbmcvfs.copy(self.photo_app_db_shm_orig, self.photo_app_db_shm_file)
-                    os.utime(self.photo_app_db_shm_file, (ctime, mtime))
-                except:
-                    pass
+                os.utime(self.photo_app_db_wal_file, (ctime_wal, mtime_wal))
         else:
-            ctime = os.stat(self.photo_app_db_orig).st_ctime
-            mtime = os.stat(self.photo_app_db_orig).st_mtime
-            if not xbmcvfs.exists(self.photo_app_db_wal_file) and xbmcvfs.exists(self.photo_app_db_file) and os.stat(self.photo_app_db_file).st_mtime == mtime:
+            if xbmcvfs.exists(self.photo_app_db_file) and os.stat(self.photo_app_db_file).st_mtime >= mtime:
                 pass
             else:
                 xbmcvfs.copy(self.photo_app_db_orig, self.photo_app_db_file)
