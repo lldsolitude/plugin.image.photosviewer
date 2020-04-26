@@ -75,7 +75,7 @@ class DB:
             for row in cur:
                 moment_list.append(row)
         except Exception, e:
-            print "photoapp.db: GetMomentList: " + smart_utf8(e)
+            log_error("photosviewer.db: GetMomentList: " + e)
             pass
         cur.close()
         return moment_list
@@ -105,7 +105,7 @@ class DB:
             for row in cur:
                 folder_list.append(row)
         except Exception, e:
-            print "photoapp.db: GetFolderList: " + smart_utf8(e)
+            log_error("photoapp.db: GetFolderList: " + e)
             pass
         cur.close()
         return folder_list
@@ -135,7 +135,7 @@ class DB:
             for row in cur:
                 album_list.append(row)
         except Exception, e:
-            print "photoapp.db: GetAlbumList: " + smart_utf8(e)
+            log_error("photoapp.db: GetAlbumList: " + e)
             pass
         cur.close()
         return album_list
@@ -155,7 +155,7 @@ class DB:
             for row in cur:
                 slideshow_list.append(row)
         except Exception, e:
-            print "photoapp.db: GetSlideshowList: " + smart_utf8(e)
+            log_error("photoapp.db: GetSlideshowList: " + e)
             pass
         cur.close()
         return slideshow_list
@@ -176,7 +176,7 @@ class DB:
             for row in cur:
                 video_list.append(row)
         except Exception, e:
-            print "photoapp.db: GetVideoList: " + smart_utf8(e)
+            log_error("photoapp.db: GetVideoList: " + e)
             pass
         cur.close()
         return video_list
@@ -264,7 +264,7 @@ class DB:
             for row in cur:
                 picture_list.append(row)
         except Exception, e:
-            print "photoapp.db: GetPictureList: " + smart_utf8(e)
+            log_error("photoapp.db: GetPictureList: " + e)
             pass
         cur.close()
         return picture_list

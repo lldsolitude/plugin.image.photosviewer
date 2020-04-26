@@ -73,9 +73,9 @@ class App:
         addon.setSetting('photo_library_path', self.photo_app_path)
         self.display_adjusted = addon.getSetting('display_adjusted')
 
-        self.photo_app_db_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('Profile')), 'Photos.sqlite')
-        self.photo_app_db_shm_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('Profile')), 'Photos.sqlite-shm')
-        self.photo_app_db_wal_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('Profile')), 'Photos.sqlite-wal')
+        self.photo_app_db_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite')
+        self.photo_app_db_shm_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite-shm')
+        self.photo_app_db_wal_file = os.path.join(xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite-wal')
         self.photo_app_db_orig = os.path.join(self.photo_app_path, 'database', 'Photos.sqlite')
         self.photo_app_db_shm_orig = os.path.join(self.photo_app_path, 'database', 'Photos.sqlite-shm')
         self.photo_app_db_wal_orig = os.path.join(self.photo_app_path, 'database', 'Photos.sqlite-wal')
@@ -124,24 +124,27 @@ class App:
         for (name,) in moments:
             if year is None:
                 url = build_url({'action': 'moments', 'year': name})
-                item = gui.ListItem(convert_timestamp(year=name), iconImage='DefaultYear.png', thumbnailImage='DefaultYear.png')
+                item = gui.ListItem(convert_timestamp(year=name))
+                item.setArt({'icon': 'DefaultYear.png', 'thumb': 'DefaultYear.png'})
                 contextmenu = []
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=name)), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_year', 'year': name})))
-                item.addContextMenuItems(contextmenu, replaceItems=True)
+                item.addContextMenuItems(contextmenu)
             elif month is None:
                 url = build_url({'action': 'moments', 'year': year[0], 'month': name})
-                item = gui.ListItem(convert_timestamp(year=year[0],month=name), iconImage='DefaultYear.png', thumbnailImage='DefaultYear.png')
+                item = gui.ListItem(convert_timestamp(year=year[0],month=name))
+                item.setArt({'icon': 'DefaultYear.png', 'thumb': 'DefaultYear.png'})
                 contextmenu = []
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0],month=name)), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_month', 'year': year[0], 'month': name})))
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0])), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_year', 'year': year[0]})))
-                item.addContextMenuItems(contextmenu, replaceItems=True)
+                item.addContextMenuItems(contextmenu)
             else:
                 url = build_url({'action': 'search_by_day', 'year': year[0], 'month': month[0], 'day': name})
-                item = gui.ListItem(convert_timestamp(year=year[0],month=month[0],day=name), iconImage='DefaultYear.png', thumbnailImage='DefaultYear.png')
+                item = gui.ListItem(convert_timestamp(year=year[0],month=month[0],day=name))
+                item.setArt({'icon': 'DefaultYear.png', 'thumb': 'DefaultYear.png'})
                 contextmenu = []
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0],month=month[0])), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_month', 'year': year[0], 'month': month[0]})))
                 contextmenu.append((addon.getLocalizedString(30012).format(period=convert_timestamp(year=year[0])), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_year', 'year': year[0]})))
-                item.addContextMenuItems(contextmenu, replaceItems=True)
+                item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         return n
@@ -151,13 +154,15 @@ class App:
         folders = self.db.GetFolderList(folderUuid)
         for (name, uuid) in folders:
             url = build_url({'action': 'albums', 'folderUuid': uuid})
-            item = gui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+            item = gui.ListItem(name)
+            item.setArt({'icon': 'DefaultFolder.png', 'thumb': 'DefaultFolder.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         albums = self.db.GetAlbumList(folderUuid)
         for (name, uuid) in albums:
             url = build_url({'action': 'albums', 'uuid': uuid})
-            item = gui.ListItem(name, iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
+            item = gui.ListItem(name)
+            item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         return n
@@ -167,7 +172,8 @@ class App:
         slideshows = self.db.GetSlideshowList()
         for (name, uuid) in slideshows:
             url = build_url({'action': 'slideshows', 'uuid': uuid})
-            item = gui.ListItem(name, iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
+            item = gui.ListItem(name)
+            item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         return n
@@ -180,11 +186,12 @@ class App:
                 imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub(r'^([-A-Z0-9]*)\.', r'\g<1>_1_201_a.', imageFilename))
             else:
                 imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
-            item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
+            item = gui.ListItem(convert_timestamp(timestamp=imageDate))
+            item.setArt({'icon': '%s' % imagePath, 'thumb': '%s' % imagePath})
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
             contextmenu.append((addon.getLocalizedString(30014), 'XBMC.Container.Update(%s)' % build_url({})))
-            item.addContextMenuItems(contextmenu, replaceItems=True)
+            item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
         return n
@@ -197,30 +204,35 @@ class App:
                 imagePath = os.path.join(self.photo_app_rendered_path, imagePath, re.sub(r'^([-A-Z0-9]*)\.', r'\g<1>_2_0_a.', imageFilename))
             else:
                 imagePath = os.path.join(self.photo_app_picture_path, imagePath, imageFilename)
-            item = gui.ListItem(convert_timestamp(timestamp=imageDate), iconImage=imagePath, thumbnailImage=imagePath)
+            item = gui.ListItem(convert_timestamp(timestamp=imageDate))
+            item.setArt({'icon': '%s' % imagePath, 'thumb': '%s' % imagePath})
             contextmenu = []
             contextmenu.append((addon.getLocalizedString(30010), 'XBMC.Container.Update(%s)' % build_url({'action': 'search_by_timestamp', 'timestamp': imageDate})))
             contextmenu.append((addon.getLocalizedString(30014), 'XBMC.Container.Update(%s)' % build_url({})))
-            item.addContextMenuItems(contextmenu, replaceItems=True)
+            item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
         return n
 
     def main_menu(self):
         url = build_url({'action': 'moments'})
-        item = gui.ListItem(addon.getLocalizedString(30001), iconImage='DefaultPicture.png', thumbnailImage='DefaultPicture.png')
+        item = gui.ListItem(addon.getLocalizedString(30001))
+        item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
         url = build_url({'action': 'albums', 'folderUuid': 'root'})
-        item = gui.ListItem(addon.getLocalizedString(30004), iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+        item = gui.ListItem(addon.getLocalizedString(30004))
+        item.setArt({'icon': 'DefaultFolder.png', 'thumb': 'DefaultFolder.png'})
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
         url = build_url({'action': 'videos'})
-        item = gui.ListItem(addon.getLocalizedString(30005), iconImage='DefaultVideo.png', thumbnailImage='DefaultVideo.png')
+        item = gui.ListItem(addon.getLocalizedString(30005))
+        item.setArt({'icon': 'DefaultVideo.png', 'thumb': 'DefaultVideo.png'})
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
         url = build_url({'action': 'slideshows'})
-        item = gui.ListItem(addon.getLocalizedString(30006), iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+        item = gui.ListItem(addon.getLocalizedString(30006))
+        item.setArt({'icon': 'DefaultFolder.png', 'thumb': 'DefaultFolder.png'})
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
         return 4
@@ -236,7 +248,6 @@ if __name__ == '__main__':
     year = args.get('year', None)
     month = args.get('month', None)
     day = args.get('day', None)
-
     timestamp = args.get('timestamp', None)
 
     app = App()

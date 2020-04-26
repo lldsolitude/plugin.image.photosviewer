@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.image.photosviewer" name="Photos Viewer" version="1.1.0" provider-name="lldsolitude">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.14.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
 	  <provides>image</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
 	  <platform>all</platform>
-	  <summary lang="en">Photos Viewer</summary>
-	  <description lang="en">Browse pictures and videos of macOS Photos App</description>
-    <disclaimer lang="en">Works on macOS 10.15 and later</disclaimer>
+	  <summary lang="en_GB">Photos Viewer</summary>
+	  <description lang="en_GB">Browse pictures and videos of macOS Photos App</description>
+    <disclaimer lang="en_GB">Works on macOS 10.15 and later</disclaimer>
     <license>GPL-2.0</license>
     <source>https://github.com/lldsolitude/plugin.image.photosviewer</source>
     <news>v1.1.0 (2020-04-23)
