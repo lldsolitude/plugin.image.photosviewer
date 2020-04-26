@@ -232,6 +232,7 @@ class App(object):
             item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
+        plugin.setContent(addon_handle, 'images')
         return n
 
     def list_videos(self):
@@ -258,6 +259,7 @@ class App(object):
             item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
+        plugin.setContent(addon_handle, 'videos')
         return n
 
     def main_menu(self):
