@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 try:
     from sqlite3 import dbapi2 as sqlite
 except:
     from pysqlite2 import dbapi2 as sqlite
 
-import sys
-import os
-import time
-import locale
-
 import xbmc
-from common import *
 
-class DB:
+class DB(object):
 
     def __init__(self, dbfile):
         self.OpenDB(dbfile)
@@ -24,13 +26,13 @@ class DB:
     def OpenDB(self, dbfile):
         try:
             self.dbconn = sqlite.connect(dbfile)
-        except Exception, e:
+        except Exception:
             pass
 
     def CloseDB(self):
         try:
             self.dbconn.close()
-        except Exception, e:
+        except Exception:
             pass
 
     def GetMomentList(self, year, month):
@@ -74,9 +76,8 @@ class DB:
                                """, ('%s-%s' % (year[0], month[0]),))
             for row in cur:
                 moment_list.append(row)
-        except Exception, e:
-            log_error("photosviewer.db: GetMomentList: " + e)
-            pass
+        except Exception as e:
+            xbmc.log("photosviewer.db: GetMomentList: " + e, xbmc.LOGERROR)
         cur.close()
         return moment_list
 
@@ -104,9 +105,8 @@ class DB:
                                ORDER BY f.ZTITLE ASC""", (folderUuid,))
             for row in cur:
                 folder_list.append(row)
-        except Exception, e:
-            log_error("photoapp.db: GetFolderList: " + e)
-            pass
+        except Exception as e:
+            xbmc.log("photoapp.db: GetFolderList: " + e, xbmc.LOGERROR)
         cur.close()
         return folder_list
 
@@ -134,9 +134,8 @@ class DB:
                                ORDER BY a.ZTITLE ASC""", (folderUuid,))
             for row in cur:
                 album_list.append(row)
-        except Exception, e:
-            log_error("photoapp.db: GetAlbumList: " + e)
-            pass
+        except Exception as e:
+            xbmc.log("photoapp.db: GetAlbumList: " + e, xbmc.LOGERROR)
         cur.close()
         return album_list
 
@@ -154,9 +153,8 @@ class DB:
                            ORDER BY a.ZTITLE ASC""")
             for row in cur:
                 slideshow_list.append(row)
-        except Exception, e:
-            log_error("photoapp.db: GetSlideshowList: " + e)
-            pass
+        except Exception as e:
+            xbmc.log("photoapp.db: GetSlideshowList: " + e, xbmc.LOGERROR)
         cur.close()
         return slideshow_list
 
@@ -175,9 +173,8 @@ class DB:
                            ORDER BY m.ZDATECREATED ASC""")
             for row in cur:
                 video_list.append(row)
-        except Exception, e:
-            log_error("photoapp.db: GetVideoList: " + e)
-            pass
+        except Exception as e:
+            xbmc.log("photoapp.db: GetVideoList: " + e, xbmc.LOGERROR)
         cur.close()
         return video_list
 
@@ -263,8 +260,7 @@ class DB:
                                ORDER BY m.ZDATECREATED ASC""", (uuid,))
             for row in cur:
                 picture_list.append(row)
-        except Exception, e:
-            log_error("photoapp.db: GetPictureList: " + e)
-            pass
+        except Exception as e:
+            xbmc.log("photoapp.db: GetPictureList: " + e, xbmc.LOGERROR)
         cur.close()
         return picture_list

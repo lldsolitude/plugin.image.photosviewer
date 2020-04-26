@@ -1,12 +1,15 @@
-v1.1.1 (2020-04-23)
-    - Add option for displaying edited versions of photos/videos
-    - Add Chinese translation
-    - Add Slideshows browsing
-    - Updated Kodi APIs. Now only compatible with Kodi v13+
+v1.2.0 (2020-04-26)
+- Port code to Python 3 to support Kodi v19
+
+v1.1.1 (2020-04-26)
+- Add option for displaying edited versions of photos/videos
+- Add Chinese translation
+- Add Slideshows browsing
+- Update Kodi APIs. Now only compatible with Kodi v13+
 
 v1.1.0 (2020-04-23)
-- Updated for Photos.app version 5.0 database.
-- Removed Places/People due to difficulty in implementation.
+- Update for Photos.app version 5.0 database.
+- Remove Places/People due to difficulty in implementation.
 
 v1.0 (2017-05-01)
 リリース

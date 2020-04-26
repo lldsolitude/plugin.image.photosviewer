@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 import sys
-import time
 import os
-import glob
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import datetime
 import re
 
@@ -15,7 +20,6 @@ import xbmcplugin as plugin
 import xbmcaddon
 import xbmcvfs
 
-from resources.lib.common import *
 from resources.lib.db import *
 
 addon = xbmcaddon.Addon()
@@ -27,10 +31,10 @@ sys.path.append(lib_path)
 
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
-args = urlparse.parse_qs(sys.argv[2][1:])
+args = urllib.parse.parse_qs(sys.argv[2][1:])
 
 def build_url(query):
-    return base_url + '?' + urllib.urlencode(query)
+    return base_url + '?' + urllib.parse.urlencode(query)
 
 def convert_timestamp(year=None, month=None, day=None, hour=None, minute=None, timestamp=None):
     if timestamp:
@@ -58,13 +62,13 @@ def convert_timestamp(year=None, month=None, day=None, hour=None, minute=None, t
         itemname = ''
     return itemname
 
-class App:
+class App(object):
 
     def __init__(self):
 
         self.params = {}
-        qs = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query, keep_blank_values=True)
-        for key in qs.keys():
+        qs = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query, keep_blank_values=True)
+        for key in list(qs.keys()):
             self.params[key] = qs[key][0]
 
         self.photo_app_path = addon.getSetting('photo_library_path')
@@ -283,4 +287,5 @@ if __name__ == '__main__':
         plugin.endOfDirectory(addon_handle, True)
         xbmc.sleep(300)
     
-    if action_result: notify(action_result)
+    if action_result:
+        xbmc.executebuiltin('XBMC.Notification(%s,%s,3000)' % ('Photos Viewer', action_result))
