@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -42,7 +40,7 @@ class DB(object):
             if year is None:
                 cur.execute("""SELECT strftime(
                                  '%Y', a.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
-                                 ) as y
+                                 ) AS y
                                FROM ZGENERICASSET a, ZADDITIONALASSETATTRIBUTES b
                                WHERE b.ZASSET = a.Z_PK
                                  AND a.ZCLOUDDELETESTATE = 0
@@ -55,7 +53,7 @@ class DB(object):
             elif month is None:
                 cur.execute("""SELECT strftime(
                                  '%m', a.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
-                                 ) as m
+                                 ) AS m
                                FROM ZGENERICASSET a, ZADDITIONALASSETATTRIBUTES b
                                WHERE b.ZASSET = a.Z_PK
                                  AND a.ZCLOUDDELETESTATE = 0
@@ -71,7 +69,7 @@ class DB(object):
             else:
                 cur.execute("""SELECT strftime(
                                  '%d', a.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
-                                 ) as d
+                                 ) AS d
                                FROM ZGENERICASSET a, ZADDITIONALASSETATTRIBUTES b
                                WHERE b.ZASSET = a.Z_PK
                                  AND a.ZCLOUDDELETESTATE = 0
@@ -87,7 +85,7 @@ class DB(object):
             for row in cur:
                 moment_list.append(row)
         except Exception as e:
-            xbmc.log("photosviewer.db: GetMomentList: " + e, xbmc.LOGERROR)
+            xbmc.log('photosviewer.db: GetMomentList: ' + e, xbmc.LOGERROR)
         cur.close()
         return moment_list
 
@@ -118,7 +116,7 @@ class DB(object):
             for row in cur:
                 folder_list.append(row)
         except Exception as e:
-            xbmc.log("photoapp.db: GetFolderList: " + e, xbmc.LOGERROR)
+            xbmc.log('photosviewer.db: GetFolderList: ' + e, xbmc.LOGERROR)
         cur.close()
         return folder_list
 
@@ -149,7 +147,7 @@ class DB(object):
             for row in cur:
                 album_list.append(row)
         except Exception as e:
-            xbmc.log("photoapp.db: GetAlbumList: " + e, xbmc.LOGERROR)
+            xbmc.log('photosviewer.db: GetAlbumList: ' + e, xbmc.LOGERROR)
         cur.close()
         return album_list
 
@@ -169,7 +167,7 @@ class DB(object):
             for row in cur:
                 slideshow_list.append(row)
         except Exception as e:
-            xbmc.log("photoapp.db: GetSlideshowList: " + e, xbmc.LOGERROR)
+            xbmc.log('photosviewer.db: GetSlideshowList: ' + e, xbmc.LOGERROR)
         cur.close()
         return slideshow_list
 
@@ -177,7 +175,7 @@ class DB(object):
         video_list = []
         cur = self.dbconn.cursor()
         try:
-            cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+            cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                   m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                            FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                            WHERE m.ZCLOUDDELETESTATE = 0
@@ -191,7 +189,7 @@ class DB(object):
             for row in cur:
                 video_list.append(row)
         except Exception as e:
-            xbmc.log("photoapp.db: GetVideoList: " + e, xbmc.LOGERROR)
+            xbmc.log('photosviewer.db: GetVideoList: ' + e, xbmc.LOGERROR)
         cur.close()
         return video_list
 
@@ -200,7 +198,7 @@ class DB(object):
         cur = self.dbconn.cursor()
         try:
             if action == 'moments':
-                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                       m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
@@ -214,7 +212,7 @@ class DB(object):
                                """, (uuid,))
             elif action == 'search_by_year':
                 (year) = uuid
-                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                       m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
@@ -223,14 +221,14 @@ class DB(object):
                                  AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime(
-                                   '%Y', m.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
+                                   '%Y', t + 978307200, 'unixepoch'
                                    ) = ?
                                GROUP BY m.ZUUID
                                ORDER BY m.ZDATECREATED ASC
                                """, ('%s' % (year),))
             elif action == 'search_by_month':
                 (year, month) = uuid
-                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                       m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
@@ -239,14 +237,14 @@ class DB(object):
                                  AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime(
-                                   '%Y-%m', m.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
+                                   '%Y-%m', t + 978307200, 'unixepoch'
                                    ) = ?
                                GROUP BY m.ZUUID
                                ORDER BY m.ZDATECREATED ASC
                                """, ('%s-%s' % (year, month),))
             elif action == 'search_by_day':
                 (year, month, day) = uuid
-                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                       m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
@@ -255,7 +253,7 @@ class DB(object):
                                  AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime(
-                                   '%Y-%m-%d', m.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
+                                   '%Y-%m-%d', t + 978307200, 'unixepoch'
                                    ) = ?
                                GROUP BY m.ZUUID
                                ORDER BY m.ZDATECREATED ASC
@@ -267,7 +265,7 @@ class DB(object):
                              ('%d' % (int(float(timestamp))),))
                 (date) = cur1.fetchone()
                 cur1.close()
-                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                       m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, ZADDITIONALASSETATTRIBUTES b
                                WHERE m.ZCLOUDDELETESTATE = 0
@@ -276,13 +274,13 @@ class DB(object):
                                  AND m.ZTRASHEDSTATE = 0
                                  AND b.ZASSET = m.Z_PK
                                  AND strftime(
-                                   '%Y-%m-%d', m.ZDATECREATED + b.ZTIMEZONEOFFSET + 978307200, 'unixepoch'
+                                   '%Y-%m-%d', t + 978307200, 'unixepoch'
                                    ) = ?
                                GROUP BY m.ZUUID
                                ORDER BY m.ZDATECREATED ASC
                                """, (date[0],))
             else:
-                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) as t,
+                cur.execute("""SELECT (m.ZDATECREATED + b.ZTIMEZONEOFFSET) AS t,
                                       m.ZDIRECTORY, m.ZFILENAME, m.ZHASADJUSTMENTS
                                FROM ZGENERICASSET m, Z_26ASSETS n,
                                     ZGENERICALBUM a, ZADDITIONALASSETATTRIBUTES b
@@ -300,6 +298,6 @@ class DB(object):
             for row in cur:
                 picture_list.append(row)
         except Exception as e:
-            xbmc.log("photoapp.db: GetPictureList: " + e, xbmc.LOGERROR)
+            xbmc.log('photosviewer.db: GetPictureList: ' + e, xbmc.LOGERROR)
         cur.close()
         return picture_list

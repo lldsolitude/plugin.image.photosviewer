@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -24,9 +22,9 @@ from resources.lib.db import *
 
 addon = xbmcaddon.Addon()
 
-plugin_path = addon.getAddonInfo("path")
-resource_path = os.path.join(plugin_path, "resources")
-lib_path = os.path.join(resource_path, "lib")
+plugin_path = addon.getAddonInfo('path')
+resource_path = os.path.join(plugin_path, 'resources')
+lib_path = os.path.join(resource_path, 'lib')
 sys.path.append(lib_path)
 
 base_url = sys.argv[0]
