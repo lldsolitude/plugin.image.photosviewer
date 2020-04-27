@@ -130,8 +130,6 @@ class App(object):
         try:
             self.db.CloseDB()
         except Exception:
-<<<<<<< HEAD
-=======
             pass
 
     def open_viewmode_db(self):
@@ -139,7 +137,6 @@ class App(object):
         try:
             self.viewmode_db = ViewModeDB(self.viewmode_db_file)
         except Exception:
->>>>>>> master
             pass
 
     def close_viewmode_db(self):
