@@ -177,6 +177,7 @@ class App(object):
                 item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
+        plugin.setContent(addon_handle, 'images')
         return n
 
     def list_albums(self, folderUuid):
@@ -195,6 +196,7 @@ class App(object):
             item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
+        plugin.setContent(addon_handle, 'images')
         return n
 
     def list_slideshows(self):
@@ -206,6 +208,7 @@ class App(object):
             item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
+        plugin.setContent(addon_handle, 'images')
         return n
 
     def list_photos(self, uuid, action):
@@ -220,7 +223,6 @@ class App(object):
                 imagePath = os.path.join(
                     self.photo_app_picture_path, imagePath, imageFilename)
             item = gui.ListItem(convert_timestamp(timestamp=imageDate))
-            item.setArt({'icon': '%s' % imagePath, 'thumb': '%s' % imagePath})
             contextmenu = []
             contextmenu.append((
                 addon.getLocalizedString(30010),
@@ -247,7 +249,6 @@ class App(object):
                 imagePath = os.path.join(
                     self.photo_app_picture_path, imagePath, imageFilename)
             item = gui.ListItem(convert_timestamp(timestamp=imageDate))
-            item.setArt({'icon': '%s' % imagePath, 'thumb': '%s' % imagePath})
             contextmenu = []
             contextmenu.append((
                 addon.getLocalizedString(30010),
