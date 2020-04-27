@@ -127,7 +127,22 @@ class App(object):
         except Exception:
             pass
 
-    def list_moments(self, year, month):
+    def set_viewmode(self):
+        view_mode = int(addon.getSetting('view_mode'))
+        if (view_mode == 1):
+            xbmc.executebuiltin('Container.SetViewMode(500)')
+            #self.view_mode = 500    # Wall
+        elif (view_mode == 2):
+            xbmc.executebuiltin('Container.SetViewMode(53)')
+            #self.view_mode = 53     # Shift
+        elif (view_mode == 3):
+            xbmc.executebuiltin('Container.SetViewMode(54)')
+            #self.view_mode = 54     # InfoWall
+        else:
+            xbmc.executebuiltin('Container.SetViewMode(55)')
+            #self.view_mode = 55     # WideList
+
+    def list_moments(self, year, month, url_current):
         n = 0
         moments = self.db.GetMomentList(year, month)
         for (name,) in moments:
@@ -177,10 +192,10 @@ class App(object):
                 item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        plugin.setContent(addon_handle, 'images')
+        xbmc.executebuiltin('Container.SetViewMode(52)')
         return n
 
-    def list_albums(self, folderUuid):
+    def list_albums(self, folderUuid, url_current):
         n = 0
         folders = self.db.GetFolderList(folderUuid)
         for (name, uuid) in folders:
@@ -197,9 +212,10 @@ class App(object):
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         plugin.setContent(addon_handle, 'images')
+        xbmc.executebuiltin('Container.SetViewMode(52)')
         return n
 
-    def list_slideshows(self):
+    def list_slideshows(self, url_current):
         n = 0
         slideshows = self.db.GetSlideshowList()
         for (name, uuid) in slideshows:
@@ -209,9 +225,10 @@ class App(object):
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
         plugin.setContent(addon_handle, 'images')
+        xbmc.executebuiltin('Container.SetViewMode(52)')
         return n
 
-    def list_photos(self, uuid, action):
+    def list_photos(self, uuid, action, url_current):
         pictures = self.db.GetPictureList(uuid, action)
         n = 0
         for (imageDate, imagePath, imageFilename, isAdjusted) in pictures:
@@ -235,9 +252,10 @@ class App(object):
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
         plugin.setContent(addon_handle, 'images')
+        self.set_viewmode()
         return n
 
-    def list_videos(self):
+    def list_videos(self, url_current):
         n = 0
         videos = self.db.GetVideoList()
         for (imageDate, imagePath, imageFilename, isAdjusted) in videos:
@@ -261,6 +279,7 @@ class App(object):
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
         plugin.setContent(addon_handle, 'videos')
+        self.set_viewmode()
         return n
 
     def main_menu(self):
@@ -291,6 +310,7 @@ if __name__ == '__main__':
     action_result = None
     items = 0
 
+    url_current = sys.argv[0] + sys.argv[2]
     action = args.get('action', None)
     folderUuid = args.get('folderUuid', None)
     uuid = args.get('uuid', None)
@@ -305,27 +325,27 @@ if __name__ == '__main__':
     if action is None:
         items = app.main_menu()
     elif not (uuid is None):
-        items = app.list_photos(uuid[0], action[0])
+        items = app.list_photos(uuid[0], action[0], url_current)
     elif action[0] == 'moments':
-        items = app.list_moments(year, month)
+        items = app.list_moments(year, month, url_current)
     elif action[0] == 'albums':
-        items = app.list_albums(folderUuid[0])
+        items = app.list_albums(folderUuid[0], url_current)
     elif action[0] == 'videos':
-        items = app.list_videos()
+        items = app.list_videos(url_current)
     elif action[0] == 'slideshows':
-        items = app.list_slideshows()
+        items = app.list_slideshows(url_current)
 
     elif action[0] == 'search_by_year':
-        items = app.list_photos((year[0]), action[0])
+        items = app.list_photos((year[0]), action[0], url_current)
         mode = 'thumbnail'
     elif action[0] == 'search_by_month':
-        items = app.list_photos((year[0], month[0]), action[0])
+        items = app.list_photos((year[0], month[0]), action[0], url_current)
         mode = 'thumbnail'
     elif action[0] == 'search_by_day':
-        items = app.list_photos((year[0], month[0], day[0]), action[0])
+        items = app.list_photos((year[0], month[0], day[0]), action[0], url_current)
         mode = 'thumbnail'
     elif action[0] == 'search_by_timestamp':
-        items = app.list_photos((timestamp[0]), action[0])
+        items = app.list_photos((timestamp[0]), action[0], url_current)
         mode = 'thumbnail'
 
     app.close_db()

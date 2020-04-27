@@ -139,5 +139,25 @@ msgid "Path to Photos Library"
 msgstr "照片图库路径"
 
 msgctxt "#30211"
-msgid "If available, display edited versions instead of originals"
-msgstr "当可用时，显示编辑后的版本而非原始版本"
+msgid "If available, display edited photos/videos instead of originals"
+msgstr "当可用时，显示编辑后的照片或视频而非原始版本"
+
+msgctxt "#30330"
+msgid "Viewtype"
+msgstr "视图类型"
+
+msgctxt "#30331"
+msgid "WideList"
+msgstr "宽列表"
+
+msgctxt "#30332"
+msgid "Wall"
+msgstr "墙"
+
+msgctxt "#30333"
+msgid "Shift"
+msgstr "平移"
+
+msgctxt "#30334"
+msgid "InfoWall"
+msgstr "信息墙"
