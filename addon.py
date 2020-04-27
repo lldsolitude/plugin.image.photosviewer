@@ -113,6 +113,7 @@ class App(object):
         self.photo_app_rendered_path = os.path.join(self.photo_app_path, 'resources', 'renders')
 
         self.db = None
+        self.view_mode = 0
 
     def open_db(self):
         if self.db is not None: return
@@ -130,17 +131,13 @@ class App(object):
     def set_viewmode(self):
         view_mode = int(addon.getSetting('view_mode'))
         if (view_mode == 1):
-            xbmc.executebuiltin('Container.SetViewMode(500)')
-            #self.view_mode = 500    # Wall
+            self.view_mode = 500    # Wall
         elif (view_mode == 2):
-            xbmc.executebuiltin('Container.SetViewMode(53)')
-            #self.view_mode = 53     # Shift
+            self.view_mode = 53     # Shift
         elif (view_mode == 3):
-            xbmc.executebuiltin('Container.SetViewMode(54)')
-            #self.view_mode = 54     # InfoWall
+            self.view_mode = 54     # InfoWall
         else:
-            xbmc.executebuiltin('Container.SetViewMode(55)')
-            #self.view_mode = 55     # WideList
+            self.view_mode = 55     # WideList
 
     def list_moments(self, year, month, url_current):
         n = 0
@@ -192,7 +189,7 @@ class App(object):
                 item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        xbmc.executebuiltin('Container.SetViewMode(52)')
+        self.view_mode = 52
         return n
 
     def list_albums(self, folderUuid, url_current):
@@ -211,8 +208,7 @@ class App(object):
             item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        plugin.setContent(addon_handle, 'images')
-        xbmc.executebuiltin('Container.SetViewMode(52)')
+        self.view_mode = 52
         return n
 
     def list_slideshows(self, url_current):
@@ -224,8 +220,7 @@ class App(object):
             item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        plugin.setContent(addon_handle, 'images')
-        xbmc.executebuiltin('Container.SetViewMode(52)')
+        self.view_mode = 52
         return n
 
     def list_photos(self, uuid, action, url_current):
@@ -303,6 +298,8 @@ class App(object):
         item.setArt({'icon': 'DefaultFolder.png', 'thumb': 'DefaultFolder.png'})
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
+        self.view_mode = 55
+
         return 4
 
 if __name__ == '__main__':
@@ -355,6 +352,8 @@ if __name__ == '__main__':
     else:
         plugin.endOfDirectory(addon_handle, True)
         xbmc.sleep(300)
+        if app.view_mode:
+            xbmc.executebuiltin('Container.SetViewMode(%d)' % app.view_mode)
     
     if action_result:
         xbmc.executebuiltin('XBMC.Notification(%s,%s,3000)' % ('Photos Viewer', action_result))
