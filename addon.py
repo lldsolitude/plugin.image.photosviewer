@@ -109,13 +109,13 @@ class App(object):
         if self.db is not None: return
         try:
             self.db = DB(self.photo_app_db_file)
-        except:
+        except Exception:
             pass
 
     def close_db(self):
         try:
             self.db.CloseDB()
-        except:
+        except Exception:
             pass
 
     def list_moments(self, year, month):
