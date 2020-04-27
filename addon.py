@@ -288,4 +288,4 @@ if __name__ == '__main__':
         xbmc.sleep(300)
     
     if action_result:
-        xbmc.executebuiltin('XBMC.Notification(%s,%s,3000)' % ('Photos Viewer', action_result))
+        xbmc.executebuiltin(b'XBMC.Notification(%s,%s,3000)' % (b'Photos Viewer', action_result.encode('utf-8')))
