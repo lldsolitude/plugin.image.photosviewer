@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-  <!--
-      strings 30000 thru 30999 reserved for plugins and plugin settings
-      strings 31000 thru 31999 reserved for skins
-      strings 32000 thru 32999 reserved for scripts
-      strings 33000 thru 33999 reserved for common strings used in add-ons
-  -->
 <settings>
-  <!-- General -->
   <category label="30200">
-    <setting id="photo_library_path" type="folder" source="" label="30210" default=""/>
+    <setting id="photo_library_path" type="folder" label="30210" default=""/>
     <setting id="display_adjusted" type="bool" label="30211" default="false"/>
+    <setting id="view_mode" type="enum" label="30330" lvalues="30331|30332|30333|30334" default="1"/>
   </category>
 </settings>
