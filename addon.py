@@ -19,6 +19,7 @@ import xbmcaddon
 import xbmcvfs
 
 from resources.lib.db import *
+from resources.lib.db_viewmode import *
 
 addon = xbmcaddon.Addon()
 
@@ -112,7 +113,10 @@ class App(object):
         self.photo_app_picture_path = os.path.join(self.photo_app_path, 'originals')
         self.photo_app_rendered_path = os.path.join(self.photo_app_path, 'resources', 'renders')
 
+        self.viewmode_db_file = os.path.join(xbmc.translatePath('special://database'), 'ViewModes6.db')
+
         self.db = None
+        self.viewmode_db = None
         self.view_mode = 0
 
     def open_db(self):
@@ -125,6 +129,19 @@ class App(object):
     def close_db(self):
         try:
             self.db.CloseDB()
+        except Exception:
+            pass
+
+    def open_viewmode_db(self):
+        if self.viewmode_db is not None: return
+        try:
+            self.viewmode_db = ViewModeDB(self.viewmode_db_file)
+        except Exception:
+            pass
+
+    def close_viewmode_db(self):
+        try:
+            self.viewmode_db.CloseDB()
         except Exception:
             pass
 
@@ -189,7 +206,8 @@ class App(object):
                 item.addContextMenuItems(contextmenu)
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        self.view_mode = 52
+        if not self.viewmode_db.GetViewMode(url_current):
+            self.view_mode = 52    # IconWall
         return n
 
     def list_albums(self, folderUuid, url_current):
@@ -208,7 +226,8 @@ class App(object):
             item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        self.view_mode = 52
+        if not self.viewmode_db.GetViewMode(url_current):
+            self.view_mode = 52    # IconWall
         return n
 
     def list_slideshows(self, url_current):
@@ -220,7 +239,8 @@ class App(object):
             item.setArt({'icon': 'DefaultPicture.png', 'thumb': 'DefaultPicture.png'})
             plugin.addDirectoryItem(addon_handle, url, item, True)
             n += 1
-        self.view_mode = 52
+        if not self.viewmode_db.GetViewMode(url_current):
+            self.view_mode = 52    # IconWall
         return n
 
     def list_photos(self, uuid, action, url_current):
@@ -247,7 +267,8 @@ class App(object):
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
         plugin.setContent(addon_handle, 'images')
-        self.set_viewmode()
+        if not self.viewmode_db.GetViewMode(url_current):
+            self.set_viewmode()
         return n
 
     def list_videos(self, url_current):
@@ -274,7 +295,8 @@ class App(object):
             plugin.addDirectoryItem(addon_handle, imagePath, item, False)
             n += 1
         plugin.setContent(addon_handle, 'videos')
-        self.set_viewmode()
+        if not self.viewmode_db.GetViewMode(url_current):
+            self.set_viewmode()
         return n
 
     def main_menu(self):
@@ -298,7 +320,7 @@ class App(object):
         item.setArt({'icon': 'DefaultFolder.png', 'thumb': 'DefaultFolder.png'})
         plugin.addDirectoryItem(addon_handle, url, item, True)
 
-        self.view_mode = 55
+        self.view_mode = 55    # WideList
 
         return 4
 
@@ -318,6 +340,7 @@ if __name__ == '__main__':
 
     app = App()
     app.open_db()
+    app.open_viewmode_db()
 
     if action is None:
         items = app.main_menu()
@@ -334,18 +357,15 @@ if __name__ == '__main__':
 
     elif action[0] == 'search_by_year':
         items = app.list_photos((year[0]), action[0], url_current)
-        mode = 'thumbnail'
     elif action[0] == 'search_by_month':
         items = app.list_photos((year[0], month[0]), action[0], url_current)
-        mode = 'thumbnail'
     elif action[0] == 'search_by_day':
         items = app.list_photos((year[0], month[0], day[0]), action[0], url_current)
-        mode = 'thumbnail'
     elif action[0] == 'search_by_timestamp':
         items = app.list_photos((timestamp[0]), action[0], url_current)
-        mode = 'thumbnail'
 
     app.close_db()
+    app.close_viewmode_db()
 
     if items == 0:
         action_result = addon.getLocalizedString(30100)
