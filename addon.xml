@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.photosviewer" name="Photos Viewer" version="1.2.0" provider-name="lldsolitude">
+<addon id="plugin.image.photosviewer" name="Photos Viewer" version="1.3.0" provider-name="lldsolitude">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.future" version="0.17.1"/>
@@ -14,8 +14,8 @@
     <disclaimer lang="en_GB">Works on Kodi 13 and later for Photos 5.0 and later</disclaimer>
     <license>GPL-2.0</license>
     <source>https://github.com/lldsolitude/plugin.image.photosviewer</source>
-    <news>v1.2.0 (2020-04-26)
-    - Ported code to Python 3 to support Kodi v19
+    <news>v1.3.0 (2020-04-28)
+    - Add viewtype setting
     </news>
     <assets>
       <icon>resources/icon.png</icon>
