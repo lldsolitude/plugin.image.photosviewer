@@ -1,3 +1,6 @@
+v1.3.0 (2020-04-28)
+- Add viewtype setting
+
 v1.2.0 (2020-04-26)
 - Port code to Python 3 to support Kodi v19
 
