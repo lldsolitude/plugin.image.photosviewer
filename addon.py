@@ -23,7 +23,7 @@ from resources.lib.db_viewmode import *
 
 addon = xbmcaddon.Addon()
 
-plugin_path = addon.getAddonInfo('path')
+plugin_path = addon.getAddonInfo('path').decode('utf-8')
 resource_path = os.path.join(plugin_path, 'resources')
 lib_path = os.path.join(resource_path, 'lib')
 sys.path.append(lib_path)
@@ -74,7 +74,7 @@ class App(object):
         for key in list(qs.keys()):
             self.params[key] = qs[key][0]
 
-        self.photo_app_path = addon.getSetting('photo_library_path')
+        self.photo_app_path = addon.getSetting('photo_library_path').decode('utf-8')
         if self.photo_app_path == '':
             self.photo_app_path = os.path.join(
                 os.getenv('HOME'), 'Pictures', addon.getLocalizedString(30000))
@@ -82,9 +82,9 @@ class App(object):
         self.display_adjusted = addon.getSetting('display_adjusted')
 
         self.photo_app_db_file = os.path.join(
-            xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite')
+            xbmc.translatePath(addon.getAddonInfo('profile').decode('utf-8')), 'Photos.sqlite')
         self.photo_app_db_wal_file = os.path.join(
-            xbmc.translatePath(addon.getAddonInfo('profile')), 'Photos.sqlite-wal')
+            xbmc.translatePath(addon.getAddonInfo('profile').decode('utf-8')), 'Photos.sqlite-wal')
         self.photo_app_db_orig = os.path.join(
             self.photo_app_path, 'database', 'Photos.sqlite')
         self.photo_app_db_wal_orig = os.path.join(
